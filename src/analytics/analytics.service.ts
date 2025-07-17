@@ -68,14 +68,32 @@ export class AnalyticsService {
         chartData: [],
         topCountries: FIXED_COUNTRIES.map((country) => ({ country, users: 0 })),
         sessionSources: [],
-        newUsersByChannel: {},
-        eventSummary: {},
-        userGender: {},
-        userLanguage: {},
-        platformSummary: {},
-        osSummary: {},
-        browserSummary: {},
-        deviceCategory: {},
+        newUsersByChannel: FIXED_CHANNELS.map((channel) => ({
+          channel,
+          count: 0,
+        })),
+        eventSummary: FIXED_EVENTS.map((event) => ({ event, count: 0 })),
+        userGender: FIXED_GENDERS.map((gender) => ({ gender, count: 0 })),
+        userLanguage: FIXED_LANGUAGES.map((language) => ({
+          language,
+          count: 0,
+        })),
+        platformSummary: FIXED_PLATFORMS.map((platform) => ({
+          platform,
+          count: 0,
+        })),
+        osSummary: FIXED_OS.map((OSplatform) => ({
+          OSplatform,
+          count: 0,
+        })),
+        browserSummary: FIXED_BROWSERS.map((browsers) => ({
+          browsers,
+          count: 0,
+        })),
+        deviceCategory: FIXED_DEVICES.map((devices) => ({
+          devices,
+          count: 0,
+        })),
       };
     }
 
