@@ -14,7 +14,6 @@ const FIXED_COUNTRIES = [
   'Philippines',
   'Singapore',
 ];
-
 const FIXED_CHANNELS = ['direct', 'referral', 'organic'];
 const FIXED_EVENTS = ['signup', 'login', 'view', 'click'];
 const FIXED_GENDERS = ['male', 'female', 'other'];
@@ -82,18 +81,12 @@ export class AnalyticsService {
           platform,
           count: 0,
         })),
-        osSummary: FIXED_OS.map((OSplatform) => ({
-          OSplatform,
-          count: 0,
-        })),
+        osSummary: FIXED_OS.map((OSplatform) => ({ OSplatform, count: 0 })),
         browserSummary: FIXED_BROWSERS.map((browsers) => ({
           browsers,
           count: 0,
         })),
-        deviceCategory: FIXED_DEVICES.map((devices) => ({
-          devices,
-          count: 0,
-        })),
+        deviceCategory: FIXED_DEVICES.map((devices) => ({ devices, count: 0 })),
       };
     }
 
@@ -109,25 +102,18 @@ export class AnalyticsService {
       totalRevenue: 0,
     };
 
-    const countryMap: Record<string, number> = {};
-    const channelMap: Record<string, number> = {};
-    const eventMap: Record<string, number> = {};
-    const genderMap: Record<string, number> = {};
-    const languageMap: Record<string, number> = {};
-    const platformMap: Record<string, number> = {};
-    const osMap: Record<string, number> = {};
-    const browserMap: Record<string, number> = {};
-    const deviceMap: Record<string, number> = {};
+    const initMap = (keys: string[]) =>
+      Object.fromEntries(keys.map((k) => [k, 0]));
 
-    FIXED_COUNTRIES.forEach((c) => (countryMap[c] = 0));
-    FIXED_CHANNELS.forEach((c) => (channelMap[c] = 0));
-    FIXED_EVENTS.forEach((e) => (eventMap[e] = 0));
-    FIXED_GENDERS.forEach((g) => (genderMap[g] = 0));
-    FIXED_LANGUAGES.forEach((l) => (languageMap[l] = 0));
-    FIXED_PLATFORMS.forEach((p) => (platformMap[p] = 0));
-    FIXED_OS.forEach((o) => (osMap[o] = 0));
-    FIXED_BROWSERS.forEach((b) => (browserMap[b] = 0));
-    FIXED_DEVICES.forEach((d) => (deviceMap[d] = 0));
+    const countryMap = initMap(FIXED_COUNTRIES);
+    const channelMap = initMap(FIXED_CHANNELS);
+    const eventMap = initMap(FIXED_EVENTS);
+    const genderMap = initMap(FIXED_GENDERS);
+    const languageMap = initMap(FIXED_LANGUAGES);
+    const platformMap = initMap(FIXED_PLATFORMS);
+    const osMap = initMap(FIXED_OS);
+    const browserMap = initMap(FIXED_BROWSERS);
+    const deviceMap = initMap(FIXED_DEVICES);
 
     for (const r of records) {
       summary.totalUsers += r.totalUsers;
@@ -140,50 +126,29 @@ export class AnalyticsService {
       summary.totalRevenue += r.totalRevenue;
       engagementSum += r.avgEngagementTimeSec;
 
-      const rowCountries = r.topCountries as Record<string, number>;
-      for (const c of FIXED_COUNTRIES) {
-        countryMap[c] += rowCountries?.[c] || 0;
-      }
+      const accumulate = (
+        arr: any[],
+        map: Record<string, number>,
+        key: string,
+      ) => {
+        if (!Array.isArray(arr)) return;
+        for (const item of arr) {
+          const k = item[key];
+          if (map[k] !== undefined) {
+            map[k] += item.count || 0;
+          }
+        }
+      };
 
-      const channels = r.newUsersByChannel as Record<string, number>;
-      for (const c of FIXED_CHANNELS) {
-        channelMap[c] += channels?.[c] || 0;
-      }
-
-      const events = r.eventSummary as Record<string, number>;
-      for (const e of FIXED_EVENTS) {
-        eventMap[e] += events?.[e] || 0;
-      }
-
-      const genders = r.userGender as Record<string, number>;
-      for (const g of FIXED_GENDERS) {
-        genderMap[g] += genders?.[g] || 0;
-      }
-
-      const langs = r.userLanguage as Record<string, number>;
-      for (const l of FIXED_LANGUAGES) {
-        languageMap[l] += langs?.[l] || 0;
-      }
-
-      const platforms = r.platformSummary as Record<string, number>;
-      for (const p of FIXED_PLATFORMS) {
-        platformMap[p] += platforms?.[p] || 0;
-      }
-
-      const osList = r.osSummary as Record<string, number>;
-      for (const o of FIXED_OS) {
-        osMap[o] += osList?.[o] || 0;
-      }
-
-      const browsers = r.browserSummary as Record<string, number>;
-      for (const b of FIXED_BROWSERS) {
-        browserMap[b] += browsers?.[b] || 0;
-      }
-
-      const devices = r.deviceCategory as Record<string, number>;
-      for (const d of FIXED_DEVICES) {
-        deviceMap[d] += devices?.[d] || 0;
-      }
+      accumulate((r.topCountries as any[]) || [], countryMap, 'country');
+      accumulate((r.newUsersByChannel as any[]) || [], channelMap, 'channel');
+      accumulate((r.newUsersByChannel as any[]) || [], eventMap, 'event');
+      accumulate((r.userGender as any[]) || [], genderMap, 'gender');
+      accumulate((r.userLanguage as any[]) || [], languageMap, 'language');
+      accumulate((r.platformSummary as any[]) || [], platformMap, 'platform');
+      accumulate((r.osSummary as any[]) || [], osMap, 'OSplatform');
+      accumulate((r.browserSummary as any[]) || [], browserMap, 'browsers');
+      accumulate((r.deviceCategory as any[]) || [], deviceMap, 'devices');
     }
 
     const avgEngagementTimeSec = Math.round(engagementSum / records.length);
@@ -206,14 +171,32 @@ export class AnalyticsService {
         { type: 'direct', count: summary.directSessions },
         { type: 'referral', count: summary.referralSessions },
       ],
-      newUsersByChannel: channelMap,
-      eventSummary: eventMap,
-      userGender: genderMap,
-      userLanguage: languageMap,
-      platformSummary: platformMap,
-      osSummary: osMap,
-      browserSummary: browserMap,
-      deviceCategory: deviceMap,
+      newUsersByChannel: FIXED_CHANNELS.map((c) => ({
+        channel: c,
+        count: channelMap[c],
+      })),
+      eventSummary: FIXED_EVENTS.map((e) => ({ event: e, count: eventMap[e] })),
+      userGender: FIXED_GENDERS.map((g) => ({
+        gender: g,
+        count: genderMap[g],
+      })),
+      userLanguage: FIXED_LANGUAGES.map((l) => ({
+        language: l,
+        count: languageMap[l],
+      })),
+      platformSummary: FIXED_PLATFORMS.map((p) => ({
+        platform: p,
+        count: platformMap[p],
+      })),
+      osSummary: FIXED_OS.map((o) => ({ OSplatform: o, count: osMap[o] })),
+      browserSummary: FIXED_BROWSERS.map((b) => ({
+        browsers: b,
+        count: browserMap[b],
+      })),
+      deviceCategory: FIXED_DEVICES.map((d) => ({
+        devices: d,
+        count: deviceMap[d],
+      })),
     };
   }
 }
