@@ -1,0 +1,50 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model AnalyticsStat {
+  id                    Int      @id @default(autoincrement())
+  date                  DateTime @unique
+  
+  //Summary
+  totalUsers            Int
+  newUsers              Int
+  activeUsers           Int
+  returningUsers        Int
+  sessions              Int
+  directSessions        Int
+  referralSessions      Int
+  avgEngagementTimeSec  Int
+  totalRevenue          Float
+  topCountries          Json
+
+  activeUsersByCountry  Json
+  userRetentionByCohort Json
+  userRetention         Json
+
+  eventSummary          Json
+  newUsersByChannel     Json
+  userActivityOverTime  Json 
+
+  // Retention
+  retentionPercent      Float
+  totalPlayTime         Int
+
+  // User Report
+  oldNewUsers           Json
+  userGender            Json
+  userLanguage          Json
+
+  // Tech Report
+  platformSummary       Json
+  osSummary             Json
+  browserSummary        Json
+  deviceCategory        Json
+
+  note                  String?
+}
