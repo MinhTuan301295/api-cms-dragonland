@@ -130,31 +130,32 @@ export class AnalyticsService {
         arr: any[],
         map: Record<string, number>,
         key: string,
+        valueKey = 'count',
       ) => {
         if (!Array.isArray(arr)) return;
         for (const item of arr) {
           const k = item[key];
           if (map[k] !== undefined) {
-            map[k] += item.count || 0;
+            map[k] += item[valueKey] || 0;
           }
         }
       };
 
-      accumulate((r.topCountries as any[]) || [], countryMap, 'country');
-      accumulate((r.newUsersByChannel as any[]) || [], channelMap, 'channel');
-      accumulate((r.newUsersByChannel as any[]) || [], eventMap, 'event');
-      accumulate((r.userGender as any[]) || [], genderMap, 'gender');
-      accumulate((r.userLanguage as any[]) || [], languageMap, 'language');
-      accumulate((r.platformSummary as any[]) || [], platformMap, 'platform');
-      accumulate((r.osSummary as any[]) || [], osMap, 'OSplatform');
-      accumulate((r.browserSummary as any[]) || [], browserMap, 'browsers');
-      accumulate((r.deviceCategory as any[]) || [], deviceMap, 'devices');
+      accumulate(r.topCountries as any[], countryMap, 'country', 'count');
+      accumulate(r.newUsersByChannel as any[], channelMap, 'channel', 'count');
+      accumulate(r.eventSummary as any[], eventMap, 'event', 'count');
+      accumulate(r.userGender as any[], genderMap, 'gender', 'count');
+      accumulate(r.userLanguage as any[], languageMap, 'language', 'count');
+      accumulate(r.platformSummary as any[], platformMap, 'platform', 'count');
+      accumulate(r.osSummary as any[], osMap, 'OSplatform', 'count');
+      accumulate(r.browserSummary as any[], browserMap, 'browsers', 'count');
+      accumulate(r.deviceCategory as any[], deviceMap, 'devices', 'count');
     }
 
     const avgEngagementTimeSec = Math.round(engagementSum / records.length);
     const topCountries = FIXED_COUNTRIES.map((country) => ({
       country,
-      users: countryMap[country],
+      count: countryMap[country],
     }));
 
     return {
