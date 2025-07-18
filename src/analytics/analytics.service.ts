@@ -91,6 +91,7 @@ export class AnalyticsService {
           hour: i.toString().padStart(2, '0'),
           count: 0,
         })),
+        userRetention: [],
       };
     }
 
@@ -174,6 +175,13 @@ export class AnalyticsService {
       count: countryMap[country],
     }));
 
+    const retentionRecord = records.find(
+      (r) =>
+        r.date.toISOString().split('T')[0] ===
+        fromDate.toISOString().split('T')[0],
+    );
+    const userRetention = retentionRecord?.userRetention ?? [];
+
     return {
       ...summary,
       avgEngagementTimeSec,
@@ -218,6 +226,7 @@ export class AnalyticsService {
         hour,
         count,
       })),
+      userRetention,
     };
   }
 }
