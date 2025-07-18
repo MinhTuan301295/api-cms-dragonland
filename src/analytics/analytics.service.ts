@@ -65,7 +65,7 @@ export class AnalyticsService {
         avgEngagementTimeSec: 0,
         totalRevenue: 0,
         chartData: [],
-        topCountries: FIXED_COUNTRIES.map((country) => ({ country, users: 0 })),
+        topCountries: FIXED_COUNTRIES.map((country) => ({ country, count: 0 })),
         sessionSources: [],
         newUsersByChannel: FIXED_CHANNELS.map((channel) => ({
           channel,
@@ -87,6 +87,7 @@ export class AnalyticsService {
           count: 0,
         })),
         deviceCategory: FIXED_DEVICES.map((devices) => ({ devices, count: 0 })),
+        userActivityOverTime: [],
       };
     }
 
@@ -114,6 +115,12 @@ export class AnalyticsService {
     const osMap = initMap(FIXED_OS);
     const browserMap = initMap(FIXED_BROWSERS);
     const deviceMap = initMap(FIXED_DEVICES);
+    const userActivityOverTime = records.map((r) => ({
+      date: r.date.toISOString().split('T')[0],
+      hourly: Array.isArray(r.userActivityOverTime)
+        ? r.userActivityOverTime
+        : [],
+    }));
 
     for (const r of records) {
       summary.totalUsers += r.totalUsers;
@@ -198,6 +205,7 @@ export class AnalyticsService {
         devices: d,
         count: deviceMap[d],
       })),
+      userActivityOverTime,
     };
   }
 }
