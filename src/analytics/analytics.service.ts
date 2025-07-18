@@ -87,7 +87,10 @@ export class AnalyticsService {
           count: 0,
         })),
         deviceCategory: FIXED_DEVICES.map((devices) => ({ devices, count: 0 })),
-        userActivityOverTime: [],
+        userActivityOverTime: Array.from({ length: 24 }).map((_, i) => ({
+          hour: i.toString().padStart(2, '0'),
+          count: 0,
+        })),
       };
     }
 
@@ -115,12 +118,9 @@ export class AnalyticsService {
     const osMap = initMap(FIXED_OS);
     const browserMap = initMap(FIXED_BROWSERS);
     const deviceMap = initMap(FIXED_DEVICES);
-    const userActivityOverTime = records.map((r) => ({
-      date: r.date.toISOString().split('T')[0],
-      hourly: Array.isArray(r.userActivityOverTime)
-        ? r.userActivityOverTime
-        : [],
-    }));
+    const hourMap = Object.fromEntries(
+      Array.from({ length: 24 }, (_, i) => [i.toString().padStart(2, '0'), 0]),
+    );
 
     for (const r of records) {
       summary.totalUsers += r.totalUsers;
@@ -157,6 +157,15 @@ export class AnalyticsService {
       accumulate(r.osSummary as any[], osMap, 'OSplatform', 'count');
       accumulate(r.browserSummary as any[], browserMap, 'browsers', 'count');
       accumulate(r.deviceCategory as any[], deviceMap, 'devices', 'count');
+
+      if (Array.isArray(r.userActivityOverTime)) {
+        for (const h of r.userActivityOverTime as any[]) {
+          const hour = h.hour?.toString().padStart(2, '0');
+          if (hourMap[hour] !== undefined) {
+            hourMap[hour] += h.count || 0;
+          }
+        }
+      }
     }
 
     const avgEngagementTimeSec = Math.round(engagementSum / records.length);
@@ -205,7 +214,10 @@ export class AnalyticsService {
         devices: d,
         count: deviceMap[d],
       })),
-      userActivityOverTime,
+      userActivityOverTime: Object.entries(hourMap).map(([hour, count]) => ({
+        hour,
+        count,
+      })),
     };
   }
 }
