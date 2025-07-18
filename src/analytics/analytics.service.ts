@@ -191,6 +191,10 @@ export class AnalyticsService {
         activeUsers: r.activeUsers,
         sessions: r.sessions,
       })),
+      engagementChartData: records.map((r) => ({
+        date: r.date.toISOString().split('T')[0],
+        avgEngagementTimeSec: r.avgEngagementTimeSec,
+      })),
       topCountries,
       sessionSources: [
         { type: 'direct', count: summary.directSessions },
