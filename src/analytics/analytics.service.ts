@@ -66,6 +66,10 @@ export class AnalyticsService {
         totalRevenue: 0,
         chartData: [],
         topCountries: FIXED_COUNTRIES.map((country) => ({ country, count: 0 })),
+        activeUsersByCountry: FIXED_COUNTRIES.map((country) => ({
+          country,
+          count: 0,
+        })),
         sessionSources: [],
         newUsersByChannel: FIXED_CHANNELS.map((channel) => ({
           channel,
@@ -150,6 +154,12 @@ export class AnalyticsService {
       };
 
       accumulate(r.topCountries as any[], countryMap, 'country', 'count');
+      accumulate(
+        r.activeUsersByCountry as any[],
+        countryMap,
+        'country',
+        'count',
+      );
       accumulate(r.newUsersByChannel as any[], channelMap, 'channel', 'count');
       accumulate(r.eventSummary as any[], eventMap, 'event', 'count');
       accumulate(r.userGender as any[], genderMap, 'gender', 'count');
@@ -171,6 +181,10 @@ export class AnalyticsService {
 
     const avgEngagementTimeSec = Math.round(engagementSum / records.length);
     const topCountries = FIXED_COUNTRIES.map((country) => ({
+      country,
+      count: countryMap[country],
+    }));
+    const activeUsersByCountry = FIXED_COUNTRIES.map((country) => ({
       country,
       count: countryMap[country],
     }));
@@ -196,6 +210,7 @@ export class AnalyticsService {
         avgEngagementTimeSec: r.avgEngagementTimeSec,
       })),
       topCountries,
+      activeUsersByCountry,
       sessionSources: [
         { type: 'direct', count: summary.directSessions },
         { type: 'referral', count: summary.referralSessions },
