@@ -115,6 +115,7 @@ export class AnalyticsService {
       Object.fromEntries(keys.map((k) => [k, 0]));
 
     const countryMap = initMap(FIXED_COUNTRIES);
+    const activeCountryMap = initMap(FIXED_COUNTRIES);
     const channelMap = initMap(FIXED_CHANNELS);
     const eventMap = initMap(FIXED_EVENTS);
     const genderMap = initMap(FIXED_GENDERS);
@@ -156,7 +157,7 @@ export class AnalyticsService {
       accumulate(r.topCountries as any[], countryMap, 'country', 'count');
       accumulate(
         r.activeUsersByCountry as any[],
-        countryMap,
+        activeCountryMap,
         'country',
         'count',
       );
@@ -186,7 +187,7 @@ export class AnalyticsService {
     }));
     const activeUsersByCountry = FIXED_COUNTRIES.map((country) => ({
       country,
-      count: countryMap[country],
+      count: activeCountryMap[country],
     }));
 
     const retentionRecord = records.find(
