@@ -38,16 +38,20 @@ export class AnalyticsService {
   private getValidRetentionDate(fromDate: Date, toDate: Date): string {
     const MIN_DATE = new Date('2025-05-01');
     const today = new Date();
+
+    // Case 1: fromDate < MIN_DATE
     if (fromDate < MIN_DATE) {
       return '2025-05-01';
     }
 
-    if (differenceInCalendarDays(toDate, fromDate) >= 49) {
+    // Case 2: fromDate and toDate both < today and enough for 50 days
+    if (toDate < today && differenceInCalendarDays(toDate, fromDate) >= 49) {
       return fromDate.toISOString().split('T')[0];
     }
 
+    // Case 3: fromDate is within the last 50 days (not enough to display full cohort)
     const fallbackDate = new Date(today);
-    fallbackDate.setDate(fallbackDate.getDate() - 50);
+    fallbackDate.setDate(today.getDate() - 50);
     return fallbackDate.toISOString().split('T')[0];
   }
 
