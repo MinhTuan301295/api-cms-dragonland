@@ -211,40 +211,6 @@ export class AnalyticsService {
       count: activeCountryMap[country],
     }));
 
-    const yesterday = new Date(today);
-    yesterday.setDate(today.getDate() - 1);
-
-    const isFullRange =
-      fromDate <= new Date('2025-05-01') && toDate >= yesterday;
-
-    if (isFullRange) {
-      const totalActiveUsers = summary.activeUsers;
-      const distribution = {
-        Thailand: 0.1318,
-        France: 0.1217,
-        'United States': 0.1207,
-        Japan: 0.1195,
-        Philippines: 0.114,
-        Indonesia: 0.1099,
-        'South Korea': 0.1078,
-        Singapore: 0.1044,
-        Taiwan:
-          1 -
-          (0.1318 +
-            0.1217 +
-            0.1207 +
-            0.1195 +
-            0.114 +
-            0.1099 +
-            0.1078 +
-            0.1044),
-      };
-
-      activeUsersByCountry.forEach((item) => {
-        item.count = Math.round(totalActiveUsers * distribution[item.country]);
-      });
-    }
-
     const validRetentionDate = this.getValidRetentionDate(fromDate);
     const retentionRecord = await this.prisma.analyticsStat.findFirst({
       where: {
