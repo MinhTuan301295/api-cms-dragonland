@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { subDays, parseISO, isValid } from 'date-fns';
+import { differenceInCalendarDays } from 'date-fns';
 import { AnalyticsStat } from '@prisma/client';
 
 const FIXED_COUNTRIES = [
@@ -33,6 +34,22 @@ const FIXED_DEVICES = ['desktop', 'mobile', 'tablet'];
 @Injectable()
 export class AnalyticsService {
   constructor(private prisma: PrismaService) {}
+
+  private getValidRetentionDate(fromDate: Date, toDate: Date): string {
+    const MIN_DATE = new Date('2025-05-01');
+    const today = new Date();
+    if (fromDate < MIN_DATE) {
+      return '2025-05-01';
+    }
+
+    if (differenceInCalendarDays(toDate, fromDate) >= 49) {
+      return fromDate.toISOString().split('T')[0];
+    }
+
+    const fallbackDate = new Date(today);
+    fallbackDate.setDate(fallbackDate.getDate() - 50);
+    return fallbackDate.toISOString().split('T')[0];
+  }
 
   async getSummary(from?: string, to?: string) {
     const today = new Date();
@@ -190,10 +207,9 @@ export class AnalyticsService {
       count: activeCountryMap[country],
     }));
 
+    const validRetentionDate = this.getValidRetentionDate(fromDate, toDate);
     const retentionRecord = records.find(
-      (r) =>
-        r.date.toISOString().split('T')[0] ===
-        fromDate.toISOString().split('T')[0],
+      (r) => r.date.toISOString().split('T')[0] === validRetentionDate,
     );
     const userRetention = retentionRecord?.userRetention ?? [];
 
