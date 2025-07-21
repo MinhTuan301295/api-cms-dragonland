@@ -35,7 +35,7 @@ const FIXED_DEVICES = ['desktop', 'mobile', 'tablet'];
 export class AnalyticsService {
   constructor(private prisma: PrismaService) {}
 
-  private getValidRetentionDate(fromDate: Date, toDate: Date): string {
+  private getValidRetentionDate(fromDate: Date): string {
     const MIN_DATE = new Date('2025-05-01');
     const today = new Date();
 
@@ -44,8 +44,8 @@ export class AnalyticsService {
       return '2025-05-01';
     }
 
-    // Case 2: fromDate and toDate both < today and enough for 50 days
-    if (toDate < today && differenceInCalendarDays(toDate, fromDate) >= 49) {
+    // Case 2: enough for 50 days
+    if (differenceInCalendarDays(today, fromDate) >= 49) {
       return fromDate.toISOString().split('T')[0];
     }
 
@@ -211,7 +211,7 @@ export class AnalyticsService {
       count: activeCountryMap[country],
     }));
 
-    const validRetentionDate = this.getValidRetentionDate(fromDate, toDate);
+    const validRetentionDate = this.getValidRetentionDate(fromDate);
     const retentionRecord = await this.prisma.analyticsStat.findFirst({
       where: {
         date: new Date(validRetentionDate),
