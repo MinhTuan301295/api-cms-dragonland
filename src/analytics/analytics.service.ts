@@ -208,9 +208,11 @@ export class AnalyticsService {
     }));
 
     const validRetentionDate = this.getValidRetentionDate(fromDate, toDate);
-    const retentionRecord = records.find(
-      (r) => r.date.toISOString().split('T')[0] === validRetentionDate,
-    );
+    const retentionRecord = await this.prisma.analyticsStat.findFirst({
+      where: {
+        date: new Date(validRetentionDate),
+      },
+    });
     const userRetention = retentionRecord?.userRetention ?? [];
 
     return {
