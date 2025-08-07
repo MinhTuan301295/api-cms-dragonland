@@ -14,44 +14,83 @@ const FIXED_COUNTRIES = [
   'South Korea',
   'Philippines',
   'Singapore',
+  'Germany',
+  'United Kingdom',
+  'India',
+  'Brazil',
+  'Canada',
+  'Australia',
+  'Malaysia',
+  'Russia',
+  'Mexico',
+  'Turkey',
 ];
-const FIXED_CHANNELS = ['direct', 'referral', 'organic'];
-const FIXED_EVENTS = ['signup', 'login', 'view', 'click'];
-const FIXED_GENDERS = ['male', 'female', 'other'];
-const FIXED_LANGUAGES = ['us', 'fr', 'jp', 'th', 'tw', 'id', 'kr', 'ph', 'sg'];
-const FIXED_PLATFORMS = ['mobile', 'website'];
-const FIXED_OS = ['windows', 'macos', 'android', 'ios', 'ubuntu'];
+const FIXED_LANGUAGES = [
+  'us', // United States
+  'fr', // France
+  'jp', // Japan
+  'th', // Thailand
+  'tw', // Taiwan
+  'id', // Indonesia
+  'kr', // South Korea
+  'ph', // Philippines
+  'sg', // Singapore
+  'de', // Germany
+  'gb', // United Kingdom
+  'in', // India
+  'br', // Brazil
+  'ca', // Canada
+  'au', // Australia
+  'my', // Malaysia
+  'ru', // Russia
+  'mx', // Mexico
+  'tr', // Turkey
+];
+const FIXED_CHANNELS = ['Direct', 'Referral', 'Organic'];
+const FIXED_EVENTS = ['Signup', 'Login', 'View', 'Click'];
+const FIXED_GENDERS = ['Male', 'Female', 'Other'];
+const FIXED_PLATFORMS = ['Mobile', 'Website'];
+const FIXED_OS = [
+  'Windows',
+  'Macintosh',
+  'Android',
+  'iOS',
+  'Linux',
+  'Firefox OS',
+  'Chrome OS	',
+];
 const FIXED_BROWSERS = [
-  'chrome',
-  'firefox',
-  'edge',
-  'safari',
-  'chrome-inapp',
-  'safari-inapp',
+  'Chrome',
+  'Firefox',
+  'Edge',
+  'Safari',
+  'Opera',
+  'InternetExplorer',
+  'Chrome (in-app)',
+  'Safari (in-app)',
 ];
-const FIXED_DEVICES = ['desktop', 'mobile', 'tablet'];
+const FIXED_DEVICES = ['Desktop', 'Mobile', 'Tablet'];
 
 @Injectable()
 export class AnalyticsService {
   constructor(private prisma: PrismaService) {}
 
   private getValidRetentionDate(fromDate: Date): string {
-    const MIN_DATE = new Date('2025-05-01');
+    const MIN_DATE = new Date('2025-06-04');
     const today = new Date();
 
     // Case 1: fromDate < MIN_DATE
     if (fromDate < MIN_DATE) {
-      return '2025-05-01';
+      return '2025-06-04';
     }
 
     // Case 2: enough for 50 days
-    if (differenceInCalendarDays(today, fromDate) >= 49) {
+    if (differenceInCalendarDays(today, fromDate) >= 41) {
       return fromDate.toISOString().split('T')[0];
     }
 
-    // Case 3: fromDate is within the last 50 days (not enough to display full cohort)
     const fallbackDate = new Date(today);
-    fallbackDate.setDate(today.getDate() - 50);
+    fallbackDate.setDate(today.getDate() - 42);
     return fallbackDate.toISOString().split('T')[0];
   }
 

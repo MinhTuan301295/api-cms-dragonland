@@ -10,23 +10,55 @@ export const FIXED_COUNTRIES = [
   'South Korea',
   'Philippines',
   'Singapore',
+  'Germany',
+  'United Kingdom',
+  'India',
+  'Brazil',
+  'Canada',
+  'Australia',
+  'Malaysia',
+  'Russia',
+  'Mexico',
+  'Turkey',
 ];
 
 const FIXED_CHANNELS = ['direct', 'referral', 'organic'];
-const FIXED_EVENTS = ['signup', 'login', 'view', 'click'];
-const FIXED_GENDERS = ['male', 'female', 'other'];
-const FIXED_LANGUAGES = ['us', 'fr', 'jp', 'th', 'tw', 'id', 'kr', 'ph', 'sg'];
-const FIXED_PLATFORMS = ['mobile', 'web'];
-const FIXED_OS = ['windows', 'macos', 'android', 'ios', 'ubuntu'];
-const FIXED_BROWSERS = [
-  'chrome',
-  'firefox',
-  'edge',
-  'safari',
-  'chrome-inapp',
-  'safari-inapp',
+const FIXED_EVENTS = ['Signup', 'Login', 'View', 'Click'];
+const FIXED_GENDERS = ['Male', 'Female', 'Other'];
+const FIXED_LANGUAGES = [
+  'us', // United States
+  'fr', // France
+  'jp', // Japan
+  'th', // Thailand
+  'tw', // Taiwan
+  'id', // Indonesia
+  'kr', // South Korea
+  'ph', // Philippines
+  'sg', // Singapore
+  'de', // Germany
+  'gb', // United Kingdom
+  'in', // India
+  'br', // Brazil
+  'ca', // Canada
+  'au', // Australia
+  'my', // Malaysia
+  'ru', // Russia
+  'mx', // Mexico
+  'tr', // Turkey
 ];
-const FIXED_DEVICES = ['desktop', 'mobile', 'tablet'];
+const FIXED_PLATFORMS = ['Mobile', 'Website'];
+const FIXED_OS = ['Windows', 'Macintosh', 'Android', 'iOS', 'Linux'];
+const FIXED_BROWSERS = [
+  'Chrome',
+  'Firefox',
+  'Edge',
+  'Safari',
+  'Opera',
+  'InternetExplorer',
+  'Chrome (in-app)',
+  'Safari (in-app)',
+];
+const FIXED_DEVICES = ['Desktop', 'Mobile', 'Tablet'];
 
 type CountryMap = Record<string, number>;
 type GenericMap = Record<string, number>;
