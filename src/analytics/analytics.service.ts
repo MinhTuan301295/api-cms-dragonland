@@ -299,6 +299,7 @@ export class AnalyticsService {
         date: r.date.toISOString().split('T')[0],
         newUsers: r.newUsers,
         activeUsers: r.activeUsers,
+        returningUsers: r.returningUsers,
         sessions: r.sessions,
       })),
       engagementChartData: records.map((r) => ({
