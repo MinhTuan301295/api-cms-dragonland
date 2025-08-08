@@ -1,61 +1,43 @@
 import { AnalyticsStat } from '@prisma/client';
 
 export const FIXED_COUNTRIES = [
-  'United States',
-  'France',
-  'Japan',
-  'Thailand',
-  'Taiwan',
   'Indonesia',
-  'South Korea',
   'Philippines',
-  'Singapore',
-  'Germany',
-  'United Kingdom',
-  'India',
-  'Brazil',
-  'Canada',
-  'Australia',
-  'Malaysia',
-  'Russia',
-  'Mexico',
+  'Thailand',
+  'Vietnam',
   'Turkey',
+  'Russia',
+  'Brazil',
+  'South Korea',
+  'India',
+  'Japan',
+  'France',
+  'Taiwan',
+  'Canada',
+  'United States',
 ];
 
 const FIXED_CHANNELS = ['direct', 'referral', 'organic'];
 const FIXED_EVENTS = ['Signup', 'Login', 'View', 'Click'];
 const FIXED_GENDERS = ['Male', 'Female', 'Other'];
 const FIXED_LANGUAGES = [
-  'us', // United States
-  'fr', // France
-  'jp', // Japan
-  'th', // Thailand
-  'tw', // Taiwan
-  'id', // Indonesia
-  'kr', // South Korea
-  'ph', // Philippines
-  'sg', // Singapore
-  'de', // Germany
-  'gb', // United Kingdom
-  'in', // India
-  'br', // Brazil
-  'ca', // Canada
-  'au', // Australia
-  'my', // Malaysia
-  'ru', // Russia
-  'mx', // Mexico
-  'tr', // Turkey
+  'id',
+  'ph',
+  'th',
+  'vn',
+  'tr',
+  'ru',
+  'br',
+  'kr',
+  'in',
+  'jp',
+  'fr',
+  'tw',
+  'ca',
+  'us',
 ];
 const FIXED_PLATFORMS = ['Mobile', 'Website'];
-const FIXED_OS = [
-  'Windows',
-  'Macintosh',
-  'Android',
-  'iOS',
-  'Linux',
-  'FirefoxOS',
-  'ChromeOS	',
-];
+const FIXED_OS = ['Windows', 'Macintosh', 'Android', 'iOS', 'Linux'];
 const FIXED_BROWSERS = [
   'Chrome',
   'Firefox',
