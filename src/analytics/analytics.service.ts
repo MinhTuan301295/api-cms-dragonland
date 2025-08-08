@@ -56,8 +56,8 @@ const FIXED_OS = [
   'Android',
   'iOS',
   'Linux',
-  'Firefox OS',
-  'Chrome OS	',
+  'FirefoxOS',
+  'ChromeOS	',
 ];
 const FIXED_BROWSERS = [
   'Chrome',
@@ -66,8 +66,8 @@ const FIXED_BROWSERS = [
   'Safari',
   'Opera',
   'InternetExplorer',
-  'Chrome (in-app)',
-  'Safari (in-app)',
+  'Chrome(in-app)',
+  'Safari(in-app)',
 ];
 const FIXED_DEVICES = ['Desktop', 'Mobile', 'Tablet'];
 

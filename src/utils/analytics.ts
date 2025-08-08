@@ -47,7 +47,15 @@ const FIXED_LANGUAGES = [
   'tr', // Turkey
 ];
 const FIXED_PLATFORMS = ['Mobile', 'Website'];
-const FIXED_OS = ['Windows', 'Macintosh', 'Android', 'iOS', 'Linux'];
+const FIXED_OS = [
+  'Windows',
+  'Macintosh',
+  'Android',
+  'iOS',
+  'Linux',
+  'FirefoxOS',
+  'ChromeOS	',
+];
 const FIXED_BROWSERS = [
   'Chrome',
   'Firefox',
@@ -55,8 +63,8 @@ const FIXED_BROWSERS = [
   'Safari',
   'Opera',
   'InternetExplorer',
-  'Chrome (in-app)',
-  'Safari (in-app)',
+  'Chrome(in-app)',
+  'Safari(in-app)',
 ];
 const FIXED_DEVICES = ['Desktop', 'Mobile', 'Tablet'];
 
