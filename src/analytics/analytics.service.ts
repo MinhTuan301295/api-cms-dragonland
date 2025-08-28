@@ -69,22 +69,28 @@ export class AnalyticsService {
 
   private getValidRetentionDate(fromDate: Date): string {
     const MIN_DATE = new Date('2025-06-04');
-    const today = new Date();
-
-    // Case 1: fromDate < MIN_DATE
     if (fromDate < MIN_DATE) {
       return '2025-06-04';
     }
-
-    // Case 2: enough for 50 days
-    if (differenceInCalendarDays(today, fromDate) >= 41) {
-      return fromDate.toISOString().split('T')[0];
-    }
-
-    const fallbackDate = new Date(today);
-    fallbackDate.setDate(today.getDate() - 42);
-    return fallbackDate.toISOString().split('T')[0];
+    return fromDate.toISOString().split('T')[0];
   }
+
+  //   private getValidRetentionDate(fromDate: Date): string {
+  //   const MIN_DATE = new Date('2025-06-04');
+  //   const today = new Date();
+
+  //   // Case 1: fromDate < MIN_DATE
+  //   if (fromDate < MIN_DATE) {
+  //     return '2025-06-04';
+  //   }
+  //   if (differenceInCalendarDays(today, fromDate) >= 41) {
+  //     return fromDate.toISOString().split('T')[0];
+  //   }
+
+  //   const fallbackDate = new Date(today);
+  //   fallbackDate.setDate(today.getDate() - 42);
+  //   return fallbackDate.toISOString().split('T')[0];
+  // }
 
   async getSummary(from?: string, to?: string) {
     const today = new Date();
@@ -330,7 +336,26 @@ export class AnalyticsService {
         date: new Date(validRetentionDate),
       },
     });
-    const userRetention = retentionRecord?.userRetention ?? [];
+    const MAX_RETENTION_DAYS = 42;
+    const userRetentionRaw = retentionRecord?.userRetention ?? [];
+    const paddedUserRetention: {
+      returnDay: number;
+      cohortDate: string;
+      count: number;
+    }[] = [];
+    const startDate = new Date(validRetentionDate);
+    const daysSinceStart = Math.min(
+      MAX_RETENTION_DAYS,
+      differenceInCalendarDays(yesterday, startDate),
+    );
+
+    for (let i = 0; i < MAX_RETENTION_DAYS; i++) {
+      paddedUserRetention.push({
+        returnDay: i + 1,
+        cohortDate: validRetentionDate,
+        count: i < daysSinceStart ? userRetentionRaw[i]?.count || 0 : 0,
+      });
+    }
 
     return {
       ...summary,
@@ -382,7 +407,7 @@ export class AnalyticsService {
         hour,
         count,
       })),
-      userRetention,
+      userRetention: paddedUserRetention,
     };
   }
 }
